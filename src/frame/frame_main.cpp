@@ -2,7 +2,6 @@
 #include "frame_setting.h"
 #include "frame_factorytest.h"
 #include "frame_wifiscan.h"
-#include "frame_fileindex.h"
 #include "frame_home.h"
 
 enum
@@ -55,9 +54,6 @@ void key_wifiscan_cb(epdgui_args_vector_t &args)
 void key_power_cb(epdgui_args_vector_t &args)
 {
     Shutdown();
-    //Frame_Base *frame = new Frame_FileIndex("/");
-    //EPDGUI_PushFrame(frame);
-    //*((int *)(args[0])) = 0;
 }
 
 
@@ -87,7 +83,7 @@ Frame_Main::Frame_Main(void) : Frame_Base(false)
     //}
 
     _key[kKeyHome]->CanvasNormal()->pushImage(
-        0, 0, 92, 92, ImageResource_main_icon_home_92x92);
+        0, 0, 92, 92, IconResource_play_92x92);
     *(_key[kKeyHome]->CanvasPressed()) = *(_key[kKeyHome]->CanvasNormal());
     _key[kKeyHome]->CanvasPressed()->ReverseColor();
     _key[kKeyHome]->AddArgs(EPDGUI_Button::EVENT_RELEASED, 0,
@@ -95,7 +91,7 @@ Frame_Main::Frame_Main(void) : Frame_Base(false)
     _key[kKeyHome]->Bind(EPDGUI_Button::EVENT_RELEASED, key_home_cb);
 
     _key[kKeySetting]->CanvasNormal()->pushImage(
-        0, 0, 92, 92, ImageResource_main_icon_setting_92x92);
+        0, 0, 92, 92, IconResource_settings_92x92);
     *(_key[kKeySetting]->CanvasPressed()) =
         *(_key[kKeySetting]->CanvasNormal());
     _key[kKeySetting]->CanvasPressed()->ReverseColor();
@@ -104,7 +100,7 @@ Frame_Main::Frame_Main(void) : Frame_Base(false)
     _key[kKeySetting]->Bind(EPDGUI_Button::EVENT_RELEASED, key_setting_cb);
 
     _key[kKeyWifiScan]->CanvasNormal()->pushImage(
-        0, 0, 92, 92, ImageResource_main_icon_wifi_92x92);
+        0, 0, 92, 92, IconResource_wifi_92x92);
     *(_key[kKeyWifiScan]->CanvasPressed()) =
         *(_key[kKeyWifiScan]->CanvasNormal());
     _key[kKeyWifiScan]->CanvasPressed()->ReverseColor();
@@ -113,7 +109,7 @@ Frame_Main::Frame_Main(void) : Frame_Base(false)
     _key[kKeyWifiScan]->Bind(EPDGUI_Button::EVENT_RELEASED, key_wifiscan_cb);
 
     _key[kKeyPower]->CanvasNormal()->pushImage(
-        0, 0, 92, 92, ImageResource_main_icon_sdcard_92x92);
+        0, 0, 92, 92, IconResource_power_92x92);
     *(_key[kKeyPower]->CanvasPressed()) = *(_key[kKeyPower]->CanvasNormal());
     _key[kKeyPower]->CanvasPressed()->ReverseColor();
     _key[kKeyPower]->AddArgs(EPDGUI_Button::EVENT_RELEASED, 0,
@@ -142,8 +138,8 @@ void Frame_Main::AppName(m5epd_update_mode_t mode)
     _names->fillCanvas(0);
 
     
-    _names->drawString("Home", 20 + 46, 16);
-    _names->drawString("Setting", 20 + 46 + 136, 16);
+    _names->drawString("Scripts", 20 + 46, 16);
+    _names->drawString("Settings", 20 + 46 + 136, 16);
     _names->drawString("WiFi", 20 + 46 + 2 * 136, 16);
     _names->drawString("Power", 20 + 46 + 3 * 136, 16);
     _names->pushCanvas(0, 186, mode);
@@ -215,7 +211,7 @@ void Frame_Main::StatusBar(m5epd_update_mode_t mode)
 int Frame_Main::init(epdgui_args_vector_t &args)
 {
     _is_run = 1;
-    M5.EPD.WriteFullGram4bpp(GetWallpaper());
+    M5.EPD.WriteFullGram4bpp(WallPaperResource_r2_540x960);
     for (int i = 0; i < 4; i++)
     {
         EPDGUI_AddObject(_key[i]);

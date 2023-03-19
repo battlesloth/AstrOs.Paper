@@ -5,6 +5,8 @@
 #include "../epdgui/epdgui_button.h"
 #include "../global_setting.h"
 #include "../resources/ImageResource.h"
+#include "../resources/IconResource.h"
+#include "../resources/WallPaperResource.h"
 
 class Frame_Base {
    public:

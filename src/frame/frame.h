@@ -6,7 +6,7 @@
 #include "frame_factorytest.h"
 #include "frame_wifiscan.h"
 #include "frame_wifipassword.h"
-#include "frame_fileindex.h"
 #include "frame_home.h"
+#include "frame_astrosapi.h"
 
 #endif

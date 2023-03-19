@@ -116,7 +116,6 @@ void SysInit_Start(void) {
     } else {
         _initcanvas.loadFont(binaryttf, sizeof(binaryttf));
         SetTTFLoaded(false);
-        SetLanguage(LANGUAGE_EN);
         is_factory_test = true;
     }
 
@@ -133,8 +132,11 @@ void SysInit_Start(void) {
     Frame_FactoryTest *frame_factorytest = new Frame_FactoryTest();
     EPDGUI_AddFrame("Frame_FactoryTest", frame_factorytest);
     if (!is_factory_test) {
+        // Add frames here
         Frame_Setting *frame_setting = new Frame_Setting();
         EPDGUI_AddFrame("Frame_Setting", frame_setting);
+        Frame_AstrosApi *frame_astrosapi = new Frame_AstrosApi();
+        EPDGUI_AddFrame("Frame_AstrosApi", frame_astrosapi);
         Frame_WifiScan *frame_wifiscan = new Frame_WifiScan();
         EPDGUI_AddFrame("Frame_WifiScan", frame_wifiscan);
         Frame_WifiPassword *frame_wifipassword = new Frame_WifiPassword();

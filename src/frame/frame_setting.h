@@ -11,11 +11,11 @@ class Frame_Setting : public Frame_Base {
     int init(epdgui_args_vector_t &args);
 
    private:
-    EPDGUI_Button *_key_wallpaper;
-    EPDGUI_Button *_key_language;
     EPDGUI_Button *_key_shutdown;
     EPDGUI_Button *_key_restart;
     EPDGUI_Button *_key_syncntp;
+    EPDGUI_Button *_key_astrosapi;
+    EPDGUI_Button *_key_scriptsync;
 
     EPDGUI_Button *key_timezone_plus;
     EPDGUI_Button *key_timezone_reset;
