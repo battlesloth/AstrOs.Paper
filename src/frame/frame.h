@@ -8,5 +8,6 @@
 #include "frame_wifipassword.h"
 #include "frame_home.h"
 #include "frame_astrosapi.h"
+#include "frame_scripts.h"
 
 #endif

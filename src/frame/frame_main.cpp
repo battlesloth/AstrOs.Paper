@@ -17,11 +17,11 @@ enum
 
 void key_home_cb(epdgui_args_vector_t &args)
 {
-    Frame_Base *frame = EPDGUI_GetFrame("Frame_Home");
+    Frame_Base *frame = EPDGUI_GetFrame("Frame_Scripts");
     if (frame == NULL)
     {
         frame = new Frame_Home();
-        EPDGUI_AddFrame("Frame_Home", frame);
+        EPDGUI_AddFrame("Frame_Scripts", frame);
     }
     EPDGUI_PushFrame(frame);
     *((int *)(args[0])) = 0;
@@ -211,6 +211,8 @@ void Frame_Main::StatusBar(m5epd_update_mode_t mode)
 int Frame_Main::init(epdgui_args_vector_t &args)
 {
     _is_run = 1;
+    M5.EPD.SetRotation(M5EPD_Driver::ROTATE_90);
+    M5.TP.SetRotation(GT911::ROTATE_90);
     M5.EPD.WriteFullGram4bpp(WallPaperResource_r2_540x960);
     for (int i = 0; i < 4; i++)
     {

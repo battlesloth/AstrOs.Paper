@@ -2,6 +2,7 @@
 #include "frame_astrosapi.h"
 #include "frame_base.h"
 #include "frame_home.h"
+#include <HTTPClient.h>
 #include "WiFi.h"
 
 #define KEY_W 92
@@ -54,18 +55,29 @@ void key_scriptsync_cb(epdgui_args_vector_t &args)
         M5.EPD.UpdateFull(UPDATE_MODE_GL16);
         return;
     }
-    LoadingAnime_32x32_Start(532 - 15 - 32, 220 + 14);
+    LoadingAnime_32x32_Start(532 - 15 - 32, 160 + 14);
     vTaskDelay(3000 / portTICK_PERIOD_MS);
-    bool ret = true;
+    HTTPClient http;
+
+    
+    http.begin("http://" + GetAstrosApi() + "/api/remotecontrolsync");
+
+    http.addHeader("x-token", GetAstrosKey());
+
+    int respCode = http.GET();
+
     LoadingAnime_32x32_Stop();
 
-    if (ret == 0)
+    if (respCode != 200)
     {
         info.drawString("Script sync failed", 150, 55);
         info.pushCanvas(120, 430, UPDATE_MODE_GL16);
     }
     else
     {
+        String payload = http.getString();
+
+        Serial.write(payload.c_str());
         info.drawString("Success", 150, 55);
         info.pushCanvas(120, 430, UPDATE_MODE_GL16);
     }
