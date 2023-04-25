@@ -15,6 +15,8 @@ public:
 private:
     int *_page; 
     EPDGUI_Button *_key[9];
+    EPDGUI_Button * _rpanic;
+    EPDGUI_Button * _lpanic;
     EPDGUI_Button * _back;
     EPDGUI_Button * _forward; 
     M5EPD_Canvas *_canvas_title_buffer  = NULL;

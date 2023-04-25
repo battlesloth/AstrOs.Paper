@@ -1,7 +1,6 @@
 #include "frame_setting.h"
 #include "frame_astrosapi.h"
 #include "frame_base.h"
-#include "frame_home.h"
 #include <HTTPClient.h>
 #include "WiFi.h"
 

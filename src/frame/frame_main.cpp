@@ -2,7 +2,7 @@
 #include "frame_setting.h"
 #include "frame_factorytest.h"
 #include "frame_wifiscan.h"
-#include "frame_home.h"
+#include "frame_scripts.h"
 
 enum
 {
@@ -15,12 +15,12 @@ enum
 #define KEY_W 92
 #define KEY_H 92
 
-void key_home_cb(epdgui_args_vector_t &args)
+void key_scripts_cb(epdgui_args_vector_t &args)
 {
     Frame_Base *frame = EPDGUI_GetFrame("Frame_Scripts");
     if (frame == NULL)
     {
-        frame = new Frame_Home();
+        frame = new Frame_Scripts();
         EPDGUI_AddFrame("Frame_Scripts", frame);
     }
     EPDGUI_PushFrame(frame);
@@ -88,7 +88,7 @@ Frame_Main::Frame_Main(void) : Frame_Base(false)
     _key[kKeyHome]->CanvasPressed()->ReverseColor();
     _key[kKeyHome]->AddArgs(EPDGUI_Button::EVENT_RELEASED, 0,
                             (void *)(&_is_run));
-    _key[kKeyHome]->Bind(EPDGUI_Button::EVENT_RELEASED, key_home_cb);
+    _key[kKeyHome]->Bind(EPDGUI_Button::EVENT_RELEASED, key_scripts_cb);
 
     _key[kKeySetting]->CanvasNormal()->pushImage(
         0, 0, 92, 92, IconResource_settings_92x92);

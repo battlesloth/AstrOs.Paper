@@ -42,6 +42,11 @@ void key_script_cb(epdgui_args_vector_t &args){
     std::string *cmdText = static_cast<std::string*>(args[0]);
     Serial.println(cmdText->c_str());
 
+    if (cmdText->compare("0") == 0){
+        Serial.println("Empty Script");
+        return;
+    }
+
     M5EPD_Canvas info(&M5.EPD);
     
     info.createCanvas(300, 100);
@@ -53,8 +58,7 @@ void key_script_cb(epdgui_args_vector_t &args){
     if (WiFi.status() != WL_CONNECTED)
     {
         info.drawString("WiFi not connected", 150, 55);
-        info.pushCanvas(120, 430, UPDATE_MODE_GL16);
-        M5.EPD.WriteFullGram4bpp(WallPaperResource_r2_540x960);
+        info.pushCanvas(430, 120, UPDATE_MODE_GL16);
         EPDGUI_Draw(UPDATE_MODE_NONE);
         while (!M5.TP.avaliable())
             ;
@@ -76,24 +80,23 @@ void key_script_cb(epdgui_args_vector_t &args){
 
     if (respCode != 200)
     {
-       // info.drawString("Script Command Failed", 150, 55);
-       // info.pushCanvas(120, 430, UPDATE_MODE_GL16);
+         http.end();
+        info.drawString("Command Failed!", 150, 55);
+        info.pushCanvas(430, 120, UPDATE_MODE_GL16);
+        EPDGUI_Draw(UPDATE_MODE_NONE);
+        while (!M5.TP.avaliable())
+            ;
+        M5.EPD.UpdateFull(UPDATE_MODE_GL16);
+        return;
     }
     else
     {
         String payload = http.getString();
 
         Serial.write(payload.c_str());
-       // info.drawString("Success", 150, 55);
-       // info.pushCanvas(120, 430, UPDATE_MODE_GL16);
     }
 
     http.end();
-
-    //EPDGUI_Draw(UPDATE_MODE_NONE);
-    //while (!M5.TP.avaliable())
-    //    ;
-    //M5.EPD.UpdateFull(UPDATE_MODE_GL16);
 }
 
 Frame_Scripts::Frame_Scripts(void)
@@ -131,8 +134,33 @@ Frame_Scripts::Frame_Scripts(void)
         _key[i + 6]->Bind(EPDGUI_Button::EVENT_RELEASED, key_script_cb);
     }
 
-    _back = new EPDGUI_Button("B", 8, 84, 122, 430);
-    _forward = new EPDGUI_Button("F", 830, 84, 122, 430);
+    _lpanic = new EPDGUI_Button("panic",8, 84, 122, KEY_H);
+    _lpanic->CanvasNormal()->pushImage(
+        15, 19, 92, 92, IconResource_warning_92x92);
+    *(_lpanic->CanvasPressed()) = *(_lpanic->CanvasNormal());
+    _lpanic->CanvasPressed()->ReverseColor();
+    _lpanic->AddArgs(EPDGUI_Button::EVENT_RELEASED, 0, static_cast<void*>(new std::string("panic")));
+    _lpanic->Bind(EPDGUI_Button::EVENT_RELEASED, key_script_cb);
+    
+    _rpanic = new EPDGUI_Button("panic", 830, 84, 122, KEY_H);
+    _rpanic->CanvasNormal()->pushImage(
+        15, 19, 92, 92, IconResource_warning_92x92);
+    *(_rpanic->CanvasPressed()) = *(_rpanic->CanvasNormal());
+    _rpanic->CanvasPressed()->ReverseColor();
+    _rpanic->AddArgs(EPDGUI_Button::EVENT_RELEASED, 0, static_cast<void*>(new std::string("panic")));
+    _rpanic->Bind(EPDGUI_Button::EVENT_RELEASED, key_script_cb);
+    
+    _back = new EPDGUI_Button("B", 8, 237, 122, 280);
+    _back->CanvasNormal()->pushImage(
+        15, 94, 92, 92, IconResource_back_92x92);
+    *(_back->CanvasPressed()) = *(_back->CanvasNormal());
+    _back->CanvasPressed()->ReverseColor();
+
+    _forward = new EPDGUI_Button("F", 830, 237, 122, 280);
+    _forward->CanvasNormal()->pushImage(
+        15, 94, 92, 92, IconResource_forward_92x92);
+    *(_forward->CanvasPressed()) = *(_forward->CanvasNormal());
+    _forward->CanvasPressed()->ReverseColor();
 
     for (int i = 0; i < 9; i++)
     {
@@ -164,6 +192,8 @@ Frame_Scripts::~Frame_Scripts(void)
         delete _key[i];
     }
     delete _canvas_title_buffer;
+    delete _rpanic;
+    delete _lpanic;
     delete _forward;
     delete _back;
     delete _page;
@@ -180,15 +210,16 @@ int Frame_Scripts::init(epdgui_args_vector_t &args)
     M5.EPD.Clear(false);
     _canvas_title->pushCanvas(0, 8, UPDATE_MODE_NONE);
     _canvas_title_buffer->pushCanvas(540, 8, UPDATE_MODE_NONE);
+    EPDGUI_AddObject(_lpanic);
     EPDGUI_AddObject(_back);
     for (int i = 0; i < 9; i++)
     {
-        EPDGUI_AddObject(_key[i]);
         _key[i]->setLabel(_script->GetScriptName(i).c_str());
         _key[i]->AddArgs(EPDGUI_Button::EVENT_RELEASED, 0, static_cast<void*>(new std::string(_script->GetScriptValue(i))));
-        _key[i]->Draw(UPDATE_MODE_A2);
+        EPDGUI_AddObject(_key[i]);
     }
     EPDGUI_AddObject(_forward);
+    EPDGUI_AddObject(_rpanic);
     EPDGUI_AddObject(_key_exit);
     return 3;
 }
