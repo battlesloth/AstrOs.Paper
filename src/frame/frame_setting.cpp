@@ -56,10 +56,9 @@ void key_scriptsync_cb(epdgui_args_vector_t &args)
         return;
     }
     LoadingAnime_32x32_Start(532 - 15 - 32, 160 + 14);
-    vTaskDelay(3000 / portTICK_PERIOD_MS);
+
     HTTPClient http;
 
-    
     http.begin("http://" + GetAstrosApi() + "/api/remotecontrolsync");
 
     http.addHeader("x-token", GetAstrosKey());
@@ -78,9 +77,15 @@ void key_scriptsync_cb(epdgui_args_vector_t &args)
         String payload = http.getString();
 
         Serial.write(payload.c_str());
+
+        SetScripts(payload);
+
         info.drawString("Success", 150, 55);
         info.pushCanvas(120, 430, UPDATE_MODE_GL16);
     }
+    
+    http.end();
+
     M5.EPD.WriteFullGram4bpp(WallPaperResource_r2_540x960);
     title->pushCanvas(0, 8, UPDATE_MODE_NONE);
     EPDGUI_Draw(UPDATE_MODE_NONE);
@@ -128,6 +133,7 @@ void key_synctime_cb(epdgui_args_vector_t &args)
         info.drawString("Success", 150, 55);
         info.pushCanvas(120, 430, UPDATE_MODE_GL16);
     }
+
     M5.EPD.WriteFullGram4bpp(WallPaperResource_r2_540x960);
     title->pushCanvas(0, 8, UPDATE_MODE_NONE);
     tzone->pushCanvas(4, kTimeZoneY, UPDATE_MODE_NONE);

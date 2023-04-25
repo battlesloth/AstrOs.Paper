@@ -23,6 +23,8 @@ void SetAstrosApi(String ip);
 String GetAstrosApi(void);
 void SetAstrosKey(String key);
 String GetAstrosKey(void);
+void SetScripts(String scripts);
+String GetScripts(void);
 void SetWifi(String ssid, String password);
 String GetWifiSSID(void);
 String GetWifiPassword(void);

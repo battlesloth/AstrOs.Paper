@@ -128,6 +128,49 @@ String GetAstrosKey(void){
     return global_astros_key;
 }
 
+
+void SetScripts(String scripts){
+
+    SD.remove("/scripts/scripts.txt");
+
+    File f = SD.open("/scripts/scripts.txt", FILE_WRITE, true);
+
+    if (!f){
+        log_d("Failed to open script file");
+        return;
+    }
+
+    f.println(scripts);
+
+    f.close();
+
+    log_d("Script saved");
+}
+
+String GetScripts(void){
+    
+    File f = SD.open("/scripts/scripts.txt");
+
+    if (!f){
+        log_d("Failed to open script file");
+        return "{\"pages\":[]}";
+    }
+
+    String s;
+	while (f.available())
+	{
+		char charRead = f.read();
+		s += charRead;
+	}
+
+    f.close();
+
+    log_d("Script read");
+
+	return s;
+}
+
+
 void SetWifi(String ssid, String password) {
     global_wifi_ssid     = ssid;
     global_wifi_password = password;

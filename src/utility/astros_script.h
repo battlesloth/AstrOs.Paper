@@ -3,13 +3,14 @@
 
 #include <vector>
 #include <string>
+#include <M5EPD.h>
 #include "astros_paper_util.h"
 
 class AstrosScript{
   public:
     AstrosScript();
     ~AstrosScript();
-    void ParseScript(std::string blob);
+    void ParseScript(String blob);
     void IncrementPage();
     void DecrementPage();
     int GetPageCount();
